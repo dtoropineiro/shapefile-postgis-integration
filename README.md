@@ -16,3 +16,7 @@ python manage.py runserver
 ```bash
 Add shp2pgsql postgis integration 
 ```
+
+```bash
+Add GeoServer 
+```
