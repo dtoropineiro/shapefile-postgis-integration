@@ -11,7 +11,8 @@ python manage.py migrate
 ```bash
 python manage.py runserver
 ```
-## Running Locally
+## TODO
 
-```Add sql2pgsql postgis integration 
+```bash
+Add sql2pgsql postgis integration 
 ```
