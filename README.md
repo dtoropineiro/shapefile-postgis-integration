@@ -14,5 +14,5 @@ python manage.py runserver
 ## TODO
 
 ```bash
-Add sql2pgsql postgis integration 
+Add shp2pgsql postgis integration 
 ```
