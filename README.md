@@ -1,21 +1,38 @@
-## Running Locally
+## Running docker compose in detatched background mode
 
 ```bash
-pip install -r requirements.txt
+docker-compose up -d
+```
+### To shutdown
+
+```bash
+docker-compose down
+```
+## Running only django module
+
+```bash
+docker build --tag django-name-example .
 ```
 
 ```bash
-python manage.py migrate
+docker run -d -p 8000:8000 --name whatever-name django-name-example
 ```
+### To inspect what happens inside container
 
 ```bash
-python manage.py runserver
+docker exec -it whatever-name bash
 ```
-## TODO
+
+## In Progress
 
 ```bash
 Add shp2pgsql postgis integration 
 ```
+
+```bash
+Improve UI
+```
+## TODO
 
 ```bash
 Add GeoServer 

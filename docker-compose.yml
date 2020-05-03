@@ -1,0 +1,20 @@
+version: '3'
+services:
+  web:
+    build: '.'
+    ports:
+      - "8000:8000"
+  postgis-db:
+    build: './postgis'
+    environment:
+        # Multiple database with coma separated eg gis,data
+        - POSTGRES_DB=gis
+        - POSTGRES_USER=docker
+        - POSTGRES_PASS=docker
+        - ALLOW_IP_RANGE=0.0.0.0/0
+        - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
+    ports:
+        - 25432:5432
+    restart: on-failure
+    healthcheck:
+        test: "exit 0"
