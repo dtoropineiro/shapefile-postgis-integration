@@ -4,7 +4,8 @@ from django.core.files.storage import FileSystemStorage
 
 from uploads.core.models import Shapefile
 from uploads.core.forms import ShapefileForm
-
+import subprocess
+from subprocess import Popen, PIPE, STDOUT
 
 def home(request):
     shapefiles = Shapefile.objects.all()
@@ -34,3 +35,15 @@ def model_form_upload(request):
     return render(request, 'core/model_form_upload.html', {
         'form': form
     })
+
+def list_shapefiles(request):
+    data = Shapefile.objects.all()
+    context = {'list': data} 
+    return render(request, 'core/shapefile_list.html', context)
+
+def run_script(request):
+    print('Hello, friend')
+    p1=Popen(['shp2pgsql','-s'])
+    data = Shapefile.objects.all()
+    context = {'list': data} 
+    return render(request, 'core/converted.html', context)

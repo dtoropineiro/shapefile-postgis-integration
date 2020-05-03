@@ -5,5 +5,6 @@ from django.db import models
 
 class Shapefile(models.Model):
     description = models.CharField(max_length=255, blank=True)
+    #projection = models.CharField(max_length=255, blank=False)
     shapefile = models.FileField(upload_to='shapefiles/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
