@@ -14,7 +14,7 @@
     <tbody>{% for item in list %}
         <tr>
             <td>{{ item.description }}</td>
-            <td><a class="btn btn-info" href="../list/done" role="button">SHP to Postgis SQL</a></td>
+            <td><a class="btn btn-info" href="../list/done/{{ item.id }}" role="button">SHP to Postgis SQL</a></td>
             <td><a class="btn btn-danger" href="" role="button">Delete</a></td>
         </tr> {% endfor %}
     </tbody>

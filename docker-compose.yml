@@ -2,6 +2,9 @@ version: '3'
 services:
   web:
     build: '.'
+    environment: 
+      - PGPASSWORD=docker
+    container_name: webapp
     ports:
       - "8000:8000"
   postgis-db:
@@ -16,5 +19,6 @@ services:
     ports:
         - 25432:5432
     restart: on-failure
+    container_name: postgis-host
     healthcheck:
         test: "exit 0"

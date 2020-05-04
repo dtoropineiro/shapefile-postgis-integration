@@ -41,9 +41,21 @@ def list_shapefiles(request):
     context = {'list': data} 
     return render(request, 'core/shapefile_list.html', context)
 
-def run_script(request):
-    print('Hello, friend')
-    p1=Popen(['shp2pgsql','-s'])
+def run_script(request, id):
+    shp = Shapefile.objects.get(id=id)
+    user={}
+    user["locationepsg"] = "32628"  #EPSG number corresponding to the projection of your shapefile (privided as string)
+    user["dbname"] = "postgres"
+    user["schema"] = "public"
+    user["importedtable"] = "shp"
+    path_to_shape = shp.shapefile.name
+    if '.zip' in path_to_shape:
+        cmd = 'unzip media/' + path_to_shape +  ' -d ./media/shapefiles/'
+        path_to_shape= path_to_shape.replace('.zip','')
+        subprocess.call(cmd, shell=True)
+    cmd = "shp2pgsql -s 4326 ./media/" + path_to_shape + " shapefile | psql -h postgis-host -p 5432 -d gis -U docker"   
+    print('Shapefile: ' + shp.shapefile.name)
+    subprocess.call(cmd, shell=True)
     data = Shapefile.objects.all()
     context = {'list': data} 
     return render(request, 'core/converted.html', context)
