@@ -5,8 +5,8 @@ from django.core.files.storage import FileSystemStorage
 from uploads.core.models import Shapefile
 from uploads.core.forms import ShapefileForm
 import subprocess
-from subprocess import Popen, PIPE, STDOUT
-
+from uploads.core.connection import Connection
+import os
 def home(request):
     shapefiles = Shapefile.objects.all()
     return render(request, 'core/home.html', { 'shapefiles': shapefiles })
@@ -38,6 +38,8 @@ def model_form_upload(request):
 
 def list_shapefiles(request):
     data = Shapefile.objects.all()
+    con = Connection(os.environ.get('OS'))
+    print(con.host)
     context = {'list': data} 
     return render(request, 'core/shapefile_list.html', context)
 
@@ -45,16 +47,16 @@ def run_script(request, id):
     shp = Shapefile.objects.get(id=id)
     user={}
     user["locationepsg"] = "32628"  #EPSG number corresponding to the projection of your shapefile (privided as string)
-    user["dbname"] = "postgres"
-    user["schema"] = "public"
-    user["importedtable"] = "shp"
+    host = "postgis-host"
+    db_name = "gis"
+    schema = "public"
+    table = "shp"
     path_to_shape = shp.shapefile.name
     if '.zip' in path_to_shape:
         cmd = 'unzip media/' + path_to_shape +  ' -d ./media/shapefiles/'
         path_to_shape= path_to_shape.replace('.zip','')
         subprocess.call(cmd, shell=True)
-    cmd = "shp2pgsql -s 4326 ./media/" + path_to_shape + " shapefile | psql -h postgis-host -p 5432 -d gis -U docker"   
-    print('Shapefile: ' + shp.shapefile.name)
+    cmd = "shp2pgsql -s 4326 ./media/" +  path_to_shape + " shapefile | psql -h postgis-host -p 5432 -d gis -U docker"
     subprocess.call(cmd, shell=True)
     data = Shapefile.objects.all()
     context = {'list': data} 
